@@ -16,6 +16,7 @@ export interface SiteConfig {
   };
   support: {
     email: string;
+    whatsappUrl: string;
     responseHours: string;
     availability: string;
   };
@@ -46,7 +47,8 @@ export const siteConfig: SiteConfig = {
     terms: "/terms",
   },
   support: {
-    email: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "support@premiumiptv.example.com",
+    email: "iptvusapro@gmail.com",
+    whatsappUrl: "https://wa.me/212779395271",
     responseHours: "Under 15 minutes average response",
     availability: "24/7 Dedicated Support",
   },

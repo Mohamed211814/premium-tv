@@ -9,9 +9,25 @@ export interface PricingPlan {
   badge?: string;
   description: string;
   features: string[];
-  connectionCount: string;
   ctaText: string;
   ctaLink: string;
+}
+
+const standardFeatures = [
+  "Ultra HD, 4K and FHD Quality",
+  "Fast and Instant Activation",
+  "Compatible with All Devices",
+  "Anti Freeze Streaming Technology",
+  "Complete Electronic Program Guide (EPG)",
+  "24/7 Dedicated Customer Support",
+  "Free Playlist Updates and EPG Sync",
+];
+
+const WHATSAPP_BASE_URL = "https://wa.me/212779395271";
+
+export function getWhatsAppOrderUrl(duration: string, price: string): string {
+  const message = `Hello, I would like to order the Premium IPTV ${duration} Plan (${price}). Please provide me with the setup and activation details.`;
+  return `${WHATSAPP_BASE_URL}?text=${encodeURIComponent(message)}`;
 }
 
 export const pricingPlans: PricingPlan[] = [
@@ -23,17 +39,9 @@ export const pricingPlans: PricingPlan[] = [
     period: "per month",
     popular: false,
     description: "Flexible monthly access",
-    features: [
-      "Ultra HD and FHD Stream Quality",
-      "Fast and Instant Activation",
-      "Compatible with All Devices",
-      "Anti Freeze Streaming Technology",
-      "Complete Electronic Program Guide (EPG)",
-      "24/7 Dedicated Customer Support",
-    ],
-    connectionCount: "1 Device Connection",
-    ctaText: "Get 1 Month Access",
-    ctaLink: "/contact?plan=1-month",
+    features: standardFeatures,
+    ctaText: "Order 1 Month",
+    ctaLink: getWhatsAppOrderUrl("1 Month", "$14.99"),
   },
   {
     id: "plan-3-months",
@@ -45,18 +53,9 @@ export const pricingPlans: PricingPlan[] = [
     popular: false,
     badge: "Quarterly Saver",
     description: "Popular quarterly package",
-    features: [
-      "Ultra HD and FHD Stream Quality",
-      "Fast and Instant Activation",
-      "Compatible with All Devices",
-      "Anti Freeze Streaming Technology",
-      "Complete Electronic Program Guide (EPG)",
-      "Priority 24/7 Technical Support",
-      "Free Playlist Updates",
-    ],
-    connectionCount: "1 Device Connection",
-    ctaText: "Get 3 Months Access",
-    ctaLink: "/contact?plan=3-months",
+    features: standardFeatures,
+    ctaText: "Order 3 Months",
+    ctaLink: getWhatsAppOrderUrl("3 Months", "$34.99"),
   },
   {
     id: "plan-6-months",
@@ -68,18 +67,9 @@ export const pricingPlans: PricingPlan[] = [
     popular: false,
     badge: "Popular Choice",
     description: "Extended half year package",
-    features: [
-      "Ultra HD, 4K and FHD Quality",
-      "Fast and Instant Activation",
-      "Multi Device Compatibility",
-      "Anti Freeze Stream Optimization",
-      "Complete Electronic Program Guide (EPG)",
-      "Priority 24/7 Dedicated Support",
-      "Free Playlist Updates and EPG Sync",
-    ],
-    connectionCount: "Up to 2 Device Connections",
-    ctaText: "Get 6 Months Access",
-    ctaLink: "/contact?plan=6-months",
+    features: standardFeatures,
+    ctaText: "Order 6 Months",
+    ctaLink: getWhatsAppOrderUrl("6 Months", "$59.99"),
   },
   {
     id: "plan-12-months",
@@ -91,18 +81,8 @@ export const pricingPlans: PricingPlan[] = [
     popular: true,
     badge: "Best Value (Save 45%)",
     description: "Maximum savings full year access",
-    features: [
-      "Ultra HD, 4K and FHD Quality",
-      "Instant Automated Activation",
-      "Multi Device Compatibility",
-      "VIP Dedicated Server Routing",
-      "Anti Freeze Technology V2",
-      "Complete Electronic Program Guide (EPG)",
-      "VIP 24/7 Priority Support",
-      "Full 12 Month Service Guarantee",
-    ],
-    connectionCount: "Up to 2 Device Connections",
-    ctaText: "Get 12 Months Access",
-    ctaLink: "/contact?plan=12-months",
+    features: standardFeatures,
+    ctaText: "Order 12 Months",
+    ctaLink: getWhatsAppOrderUrl("12 Months", "$99.99"),
   },
 ];

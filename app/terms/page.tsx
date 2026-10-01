@@ -70,7 +70,7 @@ export default function TermsPage() {
             <section className="space-y-3">
               <h2 className="text-xl font-black text-brand-700">3. Device Connections and Usage Rules</h2>
               <p>
-                Subscribers agree to adhere to the simultaneous connection limits specified in their Premium IPTV plan. Sharing account credentials beyond the purchased device limit may result in temporary automated stream throttling to protect network integrity.
+                Subscribers agree to use account credentials responsibly across their personal devices. Sharing account credentials publicly may result in temporary automated stream protection to protect network integrity.
               </p>
             </section>
 

@@ -60,8 +60,11 @@ export function Header() {
                 className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
               />
             </div>
-            <span className="text-2xl font-black tracking-tight text-slate-950 flex items-center">
-              Premium <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 via-ruby-600 to-amber-500 ml-1.5">IPTV</span>
+            <span className="text-2xl font-black tracking-tight text-slate-950 flex items-center gap-2">
+              <span>Premium</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 via-ruby-600 to-amber-500">
+                IPTV
+              </span>
             </span>
           </Link>
 
@@ -88,12 +91,6 @@ export function Header() {
 
           {/* Desktop Right CTAs */}
           <div className="hidden md:flex items-center gap-3">
-            <Link
-              href="/setup"
-              className="text-sm font-bold text-slate-700 hover:text-brand-600 px-3 py-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-lg"
-            >
-              Setup Guide
-            </Link>
             <Link
               href="/#pricing"
               className="relative group inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-black text-sm text-white bg-gradient-to-r from-brand-600 via-ruby-600 to-amber-500 hover:from-brand-700 hover:via-ruby-700 hover:to-amber-600 shadow-md shadow-brand-500/25 hover:shadow-lg hover:scale-105 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"

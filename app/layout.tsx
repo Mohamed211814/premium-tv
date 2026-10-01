@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import WhatsAppFloating from "@/components/layout/WhatsAppFloating";
 import JsonLd from "@/components/seo/JsonLd";
 import { siteConfig } from "@/lib/site-config";
 import { getOrganizationSchema, getWebsiteSchema, buildSchemaGraph } from "@/lib/schema";
@@ -94,6 +95,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <WhatsAppFloating />
       </body>
     </html>
   );
