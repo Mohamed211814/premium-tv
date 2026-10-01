@@ -57,12 +57,12 @@ export default function HomePage() {
     <>
       <JsonLd data={homeSchema} />
       <Hero />
+      <HowItWorks />
       <PricingSection />
       <IntroSection />
       <WhySection />
       <ExperienceSection />
       <SupportedDevices />
-      <HowItWorks />
       <TestimonialsSection />
       <FaqSection />
       <CtaSection />
