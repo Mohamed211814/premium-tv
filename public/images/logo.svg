@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0ea5e9" />
+      <stop offset="50%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d1322" />
+      <stop offset="100%" stop-color="#070a12" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Rounded Shield / Tile -->
+  <rect x="10" y="10" width="180" height="180" rx="44" fill="url(#bgGrad)" stroke="#38bdf8" stroke-width="3" stroke-opacity="0.4" />
+  
+  <!-- Outer Glow Arc -->
+  <circle cx="100" cy="100" r="70" fill="none" stroke="url(#brandGrad)" stroke-width="2" stroke-dasharray="8 6" opacity="0.6" />
+
+  <!-- TV Display Frame -->
+  <rect x="42" y="55" width="116" height="82" rx="14" fill="#0b1120" stroke="url(#brandGrad)" stroke-width="5" />
+
+  <!-- TV Antenna / Signal waves -->
+  <path d="M78 38 L100 54 L122 38" fill="none" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="100" cy="54" r="3" fill="#6366f1" />
+
+  <!-- Play Triangle with Glow -->
+  <polygon points="90,78 122,96 90,114" fill="url(#brandGrad)" filter="url(#glow)" />
+
+  <!-- TV Stand -->
+  <path d="M84 148 L116 148" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" />
+  <path d="M100 137 L100 148" stroke="#38bdf8" stroke-width="4" />
+</svg>

@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+  }
+
+  html {
+    color-scheme: light;
+    scroll-behavior: smooth;
+    background-color: #ffffff;
+  }
+
+  body {
+    background-color: #ffffff;
+    color: #000000;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: #5e17eb;
+    color: #ffffff;
+  }
+
+  /* Focus ring accessibility using brand purple/gold */
+  :focus-visible {
+    outline: 2px solid #5e17eb;
+    outline-offset: 2px;
+  }
+}
+
+/* Custom subtle light scrollbar with brand purple thumb */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c494ff;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5e17eb;
+}
