@@ -53,14 +53,17 @@ export async function POST(request: Request) {
     const userMessage = message.trim();
 
     let emailDelivered = false;
+    let activationRequired = false;
 
-    // 1. Direct Email Delivery via FormSubmit service to iptvusapro@gmail.com
+    // 1. Direct Email Dispatch to iptvusapro@gmail.com via FormSubmit
     try {
       const formSubmitRes = await fetch(`https://formsubmit.co/ajax/${recipientEmail}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
+          "Origin": siteConfig.url || "https://premiumiptv.com",
+          "Referer": `${siteConfig.url || "https://premiumiptv.com"}/contact`,
         },
         body: JSON.stringify({
           name: senderName,
@@ -71,19 +74,21 @@ export async function POST(request: Request) {
           _captcha: "false",
           "Customer Name": senderName,
           "Customer Email": senderEmail,
-          "Plan / Topic": selectedPlan,
-          "Device Type": selectedDevice,
-          "Message": userMessage,
+          "Selected Plan": selectedPlan,
+          "Target Device": selectedDevice,
+          "Customer Message": userMessage,
           "Submitted At": timestamp,
         }),
       });
 
-      if (formSubmitRes.ok) {
+      const fsData = await formSubmitRes.json();
+      console.log("FormSubmit API response:", fsData);
+
+      if (fsData.success === "true" || fsData.success === true) {
         emailDelivered = true;
-        console.log("Contact form email successfully dispatched to", recipientEmail);
-      } else {
-        const errorText = await formSubmitRes.text();
-        console.warn("FormSubmit response not OK:", errorText);
+      } else if (typeof fsData.message === "string" && fsData.message.includes("Activation")) {
+        activationRequired = true;
+        console.warn("FormSubmit activation email pending confirmation at", recipientEmail);
       }
     } catch (deliveryError) {
       console.error("Error dispatching email via FormSubmit:", deliveryError);
@@ -106,29 +111,20 @@ export async function POST(request: Request) {
             text: `Name: ${senderName}\nEmail: ${senderEmail}\nPlan: ${selectedPlan}\nDevice: ${selectedDevice}\nDate: ${timestamp}\n\nMessage:\n${userMessage}`,
           }),
         });
+        emailDelivered = true;
       } catch (resendError) {
         console.error("Error dispatching via Resend:", resendError);
       }
     }
 
-    // Log the contact inquiry for server observability
-    console.log("=== NEW CONTACT INQUIRY PROCESSED ===", {
-      recipient: recipientEmail,
-      senderName,
-      senderEmail,
-      selectedPlan,
-      selectedDevice,
-      userMessage,
-      emailDelivered,
-    });
-
     return NextResponse.json({
       success: true,
-      message: `Your message has been delivered to our support team at ${recipientEmail}.`,
+      delivered: emailDelivered,
+      activationRequired,
+      message: `Your message has been routed to ${recipientEmail}.`,
       data: {
         recipient: recipientEmail,
         senderEmail,
-        delivered: emailDelivered,
       },
     });
   } catch (error) {
