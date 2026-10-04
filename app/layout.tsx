@@ -16,6 +16,9 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
+  verification: {
+    google: "sm2Y4EeT2GaC-O_gn9-7El5_u-hTxRTN78W6e3kQYX0",
+  },
   title: {
     default: `${siteConfig.name} High Definition Entertainment and Streaming`,
     template: `%s | ${siteConfig.name}`,
@@ -87,6 +90,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <head>
+        <meta name="google-site-verification" content="sm2Y4EeT2GaC-O_gn9-7El5_u-hTxRTN78W6e3kQYX0" />
         <JsonLd data={globalSchema} />
       </head>
       <body className="bg-white text-slate-950 min-h-screen flex flex-col font-sans antialiased selection:bg-brand-500 selection:text-white">
