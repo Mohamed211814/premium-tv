@@ -10,6 +10,7 @@ export interface SiteConfig {
     home: string;
     about: string;
     setup: string;
+    blog?: string;
     contact: string;
     privacy: string;
     terms: string;
@@ -42,6 +43,7 @@ export const siteConfig: SiteConfig = {
     home: "/",
     about: "/about",
     setup: "/setup",
+    blog: "/blog",
     contact: "/contact",
     privacy: "/privacy",
     terms: "/terms",

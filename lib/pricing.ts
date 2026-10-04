@@ -26,7 +26,7 @@ const standardFeatures = [
 const WHATSAPP_BASE_URL = "https://wa.me/212779395271";
 
 export function getWhatsAppOrderUrl(duration: string, price: string): string {
-  const message = `Hello, I would like to order the Premium IPTV ${duration} Plan (${price}). Please provide me with the setup and activation details.`;
+  const message = `Hello, I would like to order the ${duration} Plan (${price}).`;
   return `${WHATSAPP_BASE_URL}?text=${encodeURIComponent(message)}`;
 }
 

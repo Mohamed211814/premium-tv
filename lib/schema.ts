@@ -61,7 +61,7 @@ export function getWebPageSchema(options: {
   name: string;
   description: string;
   url: string;
-  pageType?: "WebPage" | "AboutPage" | "ContactPage" | "ItemPage";
+  pageType?: "WebPage" | "AboutPage" | "ContactPage" | "ItemPage" | "CollectionPage";
 }) {
   const baseUrl = siteConfig.url;
   const canonicalUrl = options.url.startsWith("http") ? options.url : `${baseUrl}${options.url}`;

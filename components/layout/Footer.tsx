@@ -115,6 +115,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/blog" className="text-slate-600 hover:text-brand-600 font-medium transition-colors focus:outline-none focus-visible:underline">
+                  Blog & Guides
+                </Link>
+              </li>
+              <li>
                 <Link href="/contact" className="text-slate-600 hover:text-brand-600 font-medium transition-colors focus:outline-none focus-visible:underline">
                   Contact Support
                 </Link>
@@ -210,6 +215,9 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© {currentYear} {siteConfig.name}. All rights reserved.</p>
           <div className="flex items-center gap-6">
+            <Link href="/blog" className="hover:text-brand-600 transition-colors">
+              Blog
+            </Link>
             <Link href="/privacy" className="hover:text-brand-600 transition-colors">
               Privacy Policy
             </Link>
