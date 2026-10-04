@@ -40,19 +40,56 @@ export async function POST(request: Request) {
     }
 
     const recipientEmail = siteConfig.support.email; // "iptvusapro@gmail.com"
-    const timestamp = new Date().toISOString();
+    const timestamp = new Date().toLocaleString("en-US", {
+      timeZone: "UTC",
+      dateStyle: "full",
+      timeStyle: "long",
+    });
 
-    const formattedInquiry = {
-      recipient: recipientEmail,
-      senderName: name.trim(),
-      senderEmail: email.trim(),
-      selectedPlan: plan || "General Support",
-      deviceType: deviceType || "Smart TV / Streaming Device",
-      message: message.trim(),
-      receivedAt: timestamp,
-    };
+    const senderName = name.trim();
+    const senderEmail = email.trim();
+    const selectedPlan = plan || "General Support Inquiry";
+    const selectedDevice = deviceType || "Smart TV";
+    const userMessage = message.trim();
 
-    // If Resend API key is configured in process.env, forward via Resend
+    let emailDelivered = false;
+
+    // 1. Direct Email Delivery via FormSubmit service to iptvusapro@gmail.com
+    try {
+      const formSubmitRes = await fetch(`https://formsubmit.co/ajax/${recipientEmail}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          name: senderName,
+          email: senderEmail,
+          _replyto: senderEmail,
+          _subject: `[Premium IPTV Contact] New Message from ${senderName} (${senderEmail})`,
+          _template: "table",
+          _captcha: "false",
+          "Customer Name": senderName,
+          "Customer Email": senderEmail,
+          "Plan / Topic": selectedPlan,
+          "Device Type": selectedDevice,
+          "Message": userMessage,
+          "Submitted At": timestamp,
+        }),
+      });
+
+      if (formSubmitRes.ok) {
+        emailDelivered = true;
+        console.log("Contact form email successfully dispatched to", recipientEmail);
+      } else {
+        const errorText = await formSubmitRes.text();
+        console.warn("FormSubmit response not OK:", errorText);
+      }
+    } catch (deliveryError) {
+      console.error("Error dispatching email via FormSubmit:", deliveryError);
+    }
+
+    // 2. Optional Resend API Integration if RESEND_API_KEY is configured
     if (process.env.RESEND_API_KEY) {
       try {
         await fetch("https://api.resend.com/emails", {
@@ -62,33 +99,42 @@ export async function POST(request: Request) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            from: "Premium IPTV Support <onboarding@resend.dev>",
+            from: "Premium IPTV Support <support@premiumiptv.com>",
             to: [recipientEmail],
-            reply_to: email.trim(),
-            subject: `[Premium IPTV] New Support Inquiry from ${name.trim()}`,
-            text: `Name: ${name.trim()}\nEmail: ${email.trim()}\nPlan: ${plan || "General Inquiry"}\nDevice: ${deviceType || "Not specified"}\n\nMessage:\n${message.trim()}`,
+            reply_to: senderEmail,
+            subject: `[Premium IPTV] New Support Inquiry from ${senderName}`,
+            text: `Name: ${senderName}\nEmail: ${senderEmail}\nPlan: ${selectedPlan}\nDevice: ${selectedDevice}\nDate: ${timestamp}\n\nMessage:\n${userMessage}`,
           }),
         });
-      } catch (sendErr) {
-        console.error("Failed to forward via Resend API:", sendErr);
+      } catch (resendError) {
+        console.error("Error dispatching via Resend:", resendError);
       }
     }
 
     // Log the contact inquiry for server observability
-    console.log("=== NEW CONTACT INQUIRY RECEIVED ===", JSON.stringify(formattedInquiry, null, 2));
+    console.log("=== NEW CONTACT INQUIRY PROCESSED ===", {
+      recipient: recipientEmail,
+      senderName,
+      senderEmail,
+      selectedPlan,
+      selectedDevice,
+      userMessage,
+      emailDelivered,
+    });
 
     return NextResponse.json({
       success: true,
-      message: `Your inquiry has been successfully sent to support (${recipientEmail}).`,
+      message: `Your message has been delivered to our support team at ${recipientEmail}.`,
       data: {
         recipient: recipientEmail,
-        senderEmail: email.trim(),
+        senderEmail,
+        delivered: emailDelivered,
       },
     });
   } catch (error) {
     console.error("Contact API error:", error);
     return NextResponse.json(
-      { success: false, error: "An unexpected error occurred while processing your request." },
+      { success: false, error: "An unexpected error occurred while processing your message." },
       { status: 500 }
     );
   }

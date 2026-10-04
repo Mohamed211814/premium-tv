@@ -69,19 +69,19 @@ export const faqItems: FaqItem[] = [
     id: "faq-how-much-is-iptv",
     question: "How Much is IPTV?",
     answer:
-      "IPTV pricing typically varies by subscription length. At Premium IPTV, plans start at $14.99 for 1 month flexible access, $34.99 for 3 months, $59.99 for 6 months, and $99.99 for a full 12 month plan with maximum savings. All plans include 4K quality and 24/7 support without long term contracts.",
+      "IPTV pricing typically varies by subscription length. At Premium IPTV, plans start at $11.99 for 1 month flexible access, $23.99 for 3 months, $44.95 for 6 months, and $75.99 for a full 12 month plan with maximum savings. All plans include 4K quality and 24/7 support without long term contracts.",
   },
   {
     id: "faq-price-12-month-iptv-subscription",
     question: "What is the Price of a 12 Month IPTV Subscription?",
     answer:
-      "A full 12 month Premium IPTV subscription is priced at $99.99, saving you over 45% compared to monthly renewals. It includes full access to all 4K and FHD channels, complete EPG guides, continuous playlist updates, and priority 24/7 technical support.",
+      "A full 12 month Premium IPTV subscription is priced at $75.99, saving you over 47% compared to monthly renewals. It includes full access to all 4K and FHD channels, complete EPG guides, continuous playlist updates, and priority 24/7 technical support.",
   },
   {
     id: "faq-best-iptv-offer-lowest-price",
     question: "What is the Best IPTV Offer for the Lowest Possible Price?",
     answer:
-      "The best value IPTV offer is the 12 month plan at $99.99 (just $8.33 per month equivalent), offering the lowest cost per month with all premium features included. For flexible short term viewing, the 1 month plan is available at $14.99 with no contractual obligations.",
+      "The best value IPTV offer is the 12 month plan at $75.99 (just $6.33 per month equivalent), offering the lowest cost per month with all premium features included. For flexible short term viewing, the 1 month plan is available at $11.99 with no contractual obligations.",
   },
   {
     id: "faq-what-iptv-is-the-best",
