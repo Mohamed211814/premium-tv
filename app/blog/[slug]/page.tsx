@@ -208,6 +208,27 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </div>
             )}
 
+            {/* Top CTA Button (Above Content) */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-brand-950 via-slate-900 to-brand-900 text-white border border-brand-500/30 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3.5 text-center sm:text-left">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-ruby-500 flex items-center justify-center text-white shrink-0 shadow-md">
+                  <Zap className="w-5 h-5 text-gold-300" />
+                </div>
+                <div>
+                  <p className="text-sm font-black text-white">Looking for Reliable Premium IPTV?</p>
+                  <p className="text-xs text-slate-300 font-medium">4K & FHD Quality • 99.9% Server Uptime • Instant Setup</p>
+                </div>
+              </div>
+              <Link
+                href="/#pricing"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-black text-xs sm:text-sm text-slate-950 bg-gradient-to-r from-gold-400 via-amber-300 to-gold-400 hover:from-gold-300 hover:to-amber-200 shadow-md hover:scale-105 transition-all shrink-0"
+              >
+                <Sparkles className="w-4 h-4 text-slate-950" />
+                <span>View Pricing Plans</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
             {/* Introduction paragraphs */}
             <div className="space-y-4 text-base sm:text-lg leading-relaxed text-slate-700">
               {post.content.introduction.map((introP, idx) => (
@@ -217,10 +238,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
             {/* Content Sections */}
             {post.content.sections.map((section, sIdx) => (
-              <section key={sIdx} className="space-y-6 pt-4 border-t border-slate-100">
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight">
-                  {section.heading}
-                </h2>
+              <React.Fragment key={sIdx}>
+                <section className="space-y-6 pt-4 border-t border-slate-100">
+                  <h2 className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight">
+                    {section.heading}
+                  </h2>
 
                 {section.paragraphs.map((p, pIdx) => (
                   <p key={pIdx} className="text-base sm:text-lg text-slate-700 leading-relaxed">
@@ -353,7 +375,33 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   </div>
                 )}
               </section>
-            ))}
+
+              {/* Middle CTA Button (In the Middle of the Article) */}
+              {sIdx === Math.floor(post.content.sections.length / 2) - 1 && (
+                <div className="my-10 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-brand-50 via-ruby-50/40 to-amber-50/50 border-2 border-brand-200/90 shadow-md flex flex-col md:flex-row items-center justify-between gap-6">
+                  <div className="space-y-2 text-center md:text-left">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-100 text-brand-800 text-xs font-black">
+                      <Sparkles className="w-3.5 h-3.5 text-brand-600" />
+                      <span>Flexible Subscription Options</span>
+                    </div>
+                    <h3 className="text-xl sm:text-2xl font-black text-slate-950">
+                      Ready to Stream 4K Live TV & VOD?
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-600 max-w-xl font-medium">
+                      Choose from flexible 1-month, 3-month, 6-month, or 12-month plans with instant automated activation, 99.9% server stability, and 24/7 support.
+                    </p>
+                  </div>
+                  <Link
+                    href="/#pricing"
+                    className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl font-black text-sm text-white bg-gradient-to-r from-brand-600 via-ruby-600 to-amber-500 hover:opacity-95 shadow-lg hover:scale-105 transition-all shrink-0"
+                  >
+                    <span>View Pricing Plans</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              )}
+            </React.Fragment>
+          ))}
 
             {/* FAQ Section */}
             {post.content.faqs && post.content.faqs.length > 0 && (
@@ -401,7 +449,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
           </div>
 
-          {/* Callout */}
+          {/* Bottom Callout & CTA Button (Bottom of Article) */}
           <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-brand-600 via-ruby-600 to-amber-500 text-white space-y-6 shadow-xl border-2 border-gold-400">
             <div className="space-y-3 text-center sm:text-left">
               <h3 className="text-2xl sm:text-3xl font-black">
@@ -417,7 +465,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 href="/#pricing"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl font-black text-sm text-slate-950 bg-white hover:bg-gold-50 shadow-md hover:scale-105 transition-all"
               >
-                <span>View Subscription Plans</span>
+                <Sparkles className="w-4 h-4 text-brand-600" />
+                <span>View All Pricing Plans</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
 
