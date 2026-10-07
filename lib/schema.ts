@@ -109,7 +109,9 @@ export type FaqSchemaInput = FaqItem | { question: string; answer: string };
 /**
  * Returns FAQPage structured data matching visible FAQ content
  */
-export function getFaqSchema(faqs: FaqSchemaInput[]) {
+export function getFaqSchema(faqs?: FaqSchemaInput[] | null) {
+  if (!faqs || faqs.length === 0) return null;
+
   return {
     "@type": "FAQPage",
     mainEntity: faqs.map((faq) => ({
@@ -132,6 +134,8 @@ export function getHowToSchema(options: {
   url: string;
   steps: SetupStep[];
 }) {
+  if (!options.steps || options.steps.length === 0) return null;
+
   const baseUrl = siteConfig.url;
   const canonicalUrl = options.url.startsWith("http") ? options.url : `${baseUrl}${options.url}`;
 
