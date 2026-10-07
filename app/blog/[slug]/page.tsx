@@ -12,13 +12,16 @@ import {
   Tv,
   CheckCircle2,
   Lightbulb,
-  Share2,
+  HelpCircle,
+  ShieldCheck,
+  Zap,
+  Info,
 } from "lucide-react";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import { siteConfig } from "@/lib/site-config";
 import { blogPosts, getBlogPostBySlug, getAllBlogSlugs } from "@/lib/blog";
-import { getBreadcrumbSchema, buildSchemaGraph } from "@/lib/schema";
+import { getBreadcrumbSchema, getFaqSchema, buildSchemaGraph } from "@/lib/schema";
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -37,25 +40,31 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
   if (!post) {
     return {
-      title: "Article Not Found Premium IPTV",
+      title: "Article Not Found | Premium IPTV",
       description: "The requested blog article could not be located.",
     };
   }
 
   const pageUrl = `${siteConfig.url}/blog/${slug}`;
+  const title = post.seoTitle || `${post.title} | Premium IPTV`;
 
   return {
-    title: `${post.title} Premium IPTV`,
+    title,
     description: post.excerpt,
     alternates: {
       canonical: pageUrl,
     },
     openGraph: {
-      title: `${post.title} Premium IPTV`,
+      title,
       description: post.excerpt,
       url: pageUrl,
       siteName: siteConfig.name,
       type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: post.excerpt,
     },
   };
 }
@@ -70,11 +79,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   const pageUrl = `${siteConfig.url}/blog/${slug}`;
   const breadcrumbItems = [
-    { name: "Premium IPTV Blog", url: "/blog" },
+    { name: "Blog", url: "/blog" },
     { name: post.title, url: `/blog/${slug}` },
   ];
 
-  const postSchema = buildSchemaGraph([
+  const schemas: any[] = [
     {
       "@type": "BlogPosting",
       "@id": `${pageUrl}#article`,
@@ -84,7 +93,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       mainEntityOfPage: pageUrl,
       author: {
         "@type": "Organization",
-        name: siteConfig.name,
+        name: post.author,
         url: siteConfig.url,
       },
       publisher: {
@@ -95,12 +104,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           url: `${siteConfig.url}${siteConfig.logo}`,
         },
       },
-      datePublished: "2026-10-01",
-      dateModified: "2026-10-04",
+      datePublished: "2026-10-07",
+      dateModified: "2026-10-07",
     },
     getBreadcrumbSchema(breadcrumbItems, pageUrl),
-  ]);
+  ];
 
+  if (post.content.faqs && post.content.faqs.length > 0) {
+    schemas.push(getFaqSchema(post.content.faqs));
+  }
+
+  const postSchema = buildSchemaGraph(schemas);
   const relatedPosts = blogPosts.filter((p) => p.slug !== slug).slice(0, 2);
 
   return (
@@ -157,40 +171,121 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </div>
               <div>
                 <p className="text-sm font-black text-slate-950">{post.author}</p>
-                <p className="text-xs text-slate-500 font-medium">Premium IPTV Technical Specialist</p>
+                <p className="text-xs text-slate-500 font-medium">{post.authorRole}</p>
               </div>
             </div>
           </header>
 
           {/* Article Body Content */}
-          <div className="py-10 space-y-10 text-slate-800 leading-relaxed font-medium">
-            {/* Introduction paragraph */}
-            <p className="text-base sm:text-lg leading-relaxed text-slate-700">
-              {post.content.introduction}
-            </p>
+          <div className="py-10 space-y-12 text-slate-800 leading-relaxed font-medium">
+            {/* Quick Definition Box (Featured Snippet Optimized) */}
+            {post.quickDefinition && (
+              <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-brand-50/90 via-purple-50/50 to-white border-2 border-brand-200/80 shadow-md space-y-4">
+                <div className="flex items-center gap-2.5 text-brand-800 font-black text-base sm:text-lg">
+                  <div className="w-8 h-8 rounded-xl bg-brand-600 text-white flex items-center justify-center shrink-0">
+                    <Info className="w-4 h-4" />
+                  </div>
+                  <span>Quick Definition: {post.quickDefinition.term}</span>
+                </div>
+                <p className="text-base sm:text-lg text-slate-900 leading-relaxed font-semibold">
+                  {post.quickDefinition.definition}
+                </p>
+                {post.quickDefinition.highlights && (
+                  <div className="pt-2 border-t border-brand-100">
+                    <p className="text-xs font-black text-slate-800 uppercase tracking-wider mb-2">
+                      Core Characteristics:
+                    </p>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm text-slate-700">
+                      {post.quickDefinition.highlights.map((hl, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-brand-600 shrink-0 mt-0.5" />
+                          <span>{hl}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Introduction paragraphs */}
+            <div className="space-y-4 text-base sm:text-lg leading-relaxed text-slate-700">
+              {post.content.introduction.map((introP, idx) => (
+                <p key={idx}>{introP}</p>
+              ))}
+            </div>
 
             {/* Content Sections */}
             {post.content.sections.map((section, sIdx) => (
-              <section key={sIdx} className="space-y-4">
+              <section key={sIdx} className="space-y-6 pt-4 border-t border-slate-100">
                 <h2 className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight">
                   {section.heading}
                 </h2>
 
                 {section.paragraphs.map((p, pIdx) => (
-                  <p key={pIdx} className="text-base text-slate-700 leading-relaxed">
+                  <p key={pIdx} className="text-base sm:text-lg text-slate-700 leading-relaxed">
                     {p}
                   </p>
                 ))}
 
+                {/* Subsections */}
+                {section.subsections && section.subsections.length > 0 && (
+                  <div className="space-y-6 pl-0 sm:pl-2">
+                    {section.subsections.map((sub, subIdx) => (
+                      <div key={subIdx} className="space-y-3 pt-2">
+                        <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                          {sub.subheading}
+                        </h3>
+                        {sub.paragraphs.map((subP, spIdx) => (
+                          <p key={spIdx} className="text-base text-slate-700 leading-relaxed">
+                            {subP}
+                          </p>
+                        ))}
+                        {sub.bulletPoints && sub.bulletPoints.length > 0 && (
+                          <ul className="space-y-2 pt-2">
+                            {sub.bulletPoints.map((subBp, subBpIdx) => (
+                              <li key={subBpIdx} className="flex items-start gap-2.5 text-sm sm:text-base text-slate-700">
+                                <CheckCircle2 className="w-4 h-4 text-brand-600 shrink-0 mt-1" />
+                                <span>{subBp}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Numbered List */}
+                {section.numberedList && section.numberedList.length > 0 && (
+                  <div className="space-y-4 my-6">
+                    {section.numberedList.map((item, nIdx) => (
+                      <div
+                        key={nIdx}
+                        className="p-5 rounded-2xl bg-slate-50/90 border border-slate-200 flex flex-col sm:flex-row gap-3 sm:gap-4 items-start"
+                      >
+                        <span className="px-3 py-1 rounded-xl bg-brand-600 text-white font-black text-xs shrink-0">
+                          Step {nIdx + 1}
+                        </span>
+                        <div className="space-y-1">
+                          <h4 className="font-black text-slate-950 text-base">{item.item}</h4>
+                          <p className="text-sm text-slate-700 leading-relaxed">{item.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Bullet Points */}
                 {section.bulletPoints && section.bulletPoints.length > 0 && (
                   <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 my-4">
                     <p className="text-xs font-black text-slate-900 uppercase tracking-wider">
                       Key Takeaways:
                     </p>
-                    <ul className="space-y-2">
+                    <ul className="space-y-2.5">
                       {section.bulletPoints.map((bp, bpIdx) => (
-                        <li key={bpIdx} className="flex items-start gap-2.5 text-sm text-slate-700">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                        <li key={bpIdx} className="flex items-start gap-2.5 text-sm sm:text-base text-slate-700">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-1" />
                           <span>{bp}</span>
                         </li>
                       ))}
@@ -198,6 +293,54 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   </div>
                 )}
 
+                {/* Comparison Table */}
+                {section.table && (
+                  <div className="my-6 overflow-hidden rounded-2xl border-2 border-slate-200 shadow-sm">
+                    {section.table.caption && (
+                      <div className="p-4 bg-slate-100/80 border-b border-slate-200 font-black text-sm text-slate-900">
+                        {section.table.caption}
+                      </div>
+                    )}
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                        <thead>
+                          <tr className="bg-slate-900 text-white font-black">
+                            {section.table.headers.map((th, thIdx) => (
+                              <th key={thIdx} className="p-3.5 border-b border-slate-800 whitespace-nowrap">
+                                {th}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-200 bg-white">
+                          {section.table.rows.map((row, rIdx) => (
+                            <tr
+                              key={rIdx}
+                              className={rIdx % 2 === 0 ? "bg-white hover:bg-slate-50/80" : "bg-slate-50/50 hover:bg-slate-50"}
+                            >
+                              {row.map((cell, cIdx) => (
+                                <td
+                                  key={cIdx}
+                                  className={`p-3.5 leading-relaxed text-slate-700 ${
+                                    cIdx === 0
+                                      ? "font-bold text-slate-950 whitespace-nowrap"
+                                      : cIdx === 1
+                                      ? "font-semibold text-brand-900 bg-brand-50/30"
+                                      : ""
+                                  }`}
+                                >
+                                  {cell}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* Pro Tip */}
                 {section.tip && (
                   <div className="flex items-start gap-3.5 p-5 rounded-2xl bg-amber-50/80 border border-gold-300 text-slate-900 my-4 shadow-sm">
                     <div className="w-8 h-8 rounded-xl bg-gold-400 text-slate-950 flex items-center justify-center shrink-0">
@@ -212,26 +355,60 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </section>
             ))}
 
+            {/* FAQ Section */}
+            {post.content.faqs && post.content.faqs.length > 0 && (
+              <section className="pt-8 border-t border-slate-200 space-y-6">
+                <div className="space-y-2">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 text-brand-800 text-xs font-black">
+                    <HelpCircle className="w-3.5 h-3.5" />
+                    <span>Frequently Asked Questions</span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight">
+                    Common Questions About IPTV
+                  </h2>
+                </div>
+
+                <div className="space-y-4">
+                  {post.content.faqs.map((faq, fIdx) => (
+                    <div
+                      key={fIdx}
+                      className="p-6 rounded-2xl bg-white border-2 border-slate-200 hover:border-brand-300 transition-all shadow-sm space-y-2.5"
+                    >
+                      <h3 className="text-base sm:text-lg font-black text-slate-950 flex items-start gap-2.5">
+                        <span className="text-brand-600 font-black">Q:</span>
+                        <span>{faq.question}</span>
+                      </h3>
+                      <p className="text-sm sm:text-base text-slate-700 leading-relaxed pl-6">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
             {/* Conclusion */}
-            <div className="p-8 rounded-3xl bg-white border-2 border-brand-200 shadow-md space-y-3">
+            <div className="p-8 rounded-3xl bg-gradient-to-br from-white to-brand-50/50 border-2 border-brand-200 shadow-md space-y-4">
               <div className="flex items-center gap-2 text-brand-700 font-black text-lg">
                 <Sparkles className="w-5 h-5" />
-                <span>Summary & Recommendation</span>
+                <span>Conclusion: The Evolution of Television</span>
               </div>
-              <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-                {post.content.conclusion}
-              </p>
+              <div className="space-y-3 text-sm sm:text-base text-slate-700 leading-relaxed">
+                {post.content.conclusion.map((concP, cIdx) => (
+                  <p key={cIdx}>{concP}</p>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Share & Order Callout */}
+          {/* Callout */}
           <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-brand-600 via-ruby-600 to-amber-500 text-white space-y-6 shadow-xl border-2 border-gold-400">
             <div className="space-y-3 text-center sm:text-left">
               <h3 className="text-2xl sm:text-3xl font-black">
-                Ready to Stream on Premium IPTV?
+                Ready to Experience Next-Generation IPTV?
               </h3>
               <p className="text-sm sm:text-base text-white/95 leading-relaxed font-medium">
-                Get started today with ultra fast 4K channels, bufferless streaming, and dedicated 24/7 customer assistance.
+                Explore our high-performance streaming solutions with 4K UHD picture quality, ultra-low buffering, and 24/7 customer support.
               </p>
             </div>
 
@@ -240,7 +417,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 href="/#pricing"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl font-black text-sm text-slate-950 bg-white hover:bg-gold-50 shadow-md hover:scale-105 transition-all"
               >
-                <span>Select Subscription Plan</span>
+                <span>View Subscription Plans</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
 
@@ -249,7 +426,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl font-bold text-sm text-white bg-black/30 hover:bg-black/40 border border-white/40 hover:scale-105 transition-all"
               >
                 <Tv className="w-4 h-4 text-gold-300" />
-                <span>View Device Guides</span>
+                <span>Step-by-Step Setup Guides</span>
               </Link>
             </div>
           </div>

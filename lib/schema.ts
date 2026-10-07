@@ -104,10 +104,12 @@ export function getBreadcrumbSchema(items: BreadcrumbItem[], pageUrl: string) {
   };
 }
 
+export type FaqSchemaInput = FaqItem | { question: string; answer: string };
+
 /**
  * Returns FAQPage structured data matching visible FAQ content
  */
-export function getFaqSchema(faqs: FaqItem[]) {
+export function getFaqSchema(faqs: FaqSchemaInput[]) {
   return {
     "@type": "FAQPage",
     mainEntity: faqs.map((faq) => ({
